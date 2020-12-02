@@ -1,0 +1,225 @@
+RTL = ../Bridge_rtl/*
+INC = +incdir+../wr_agt_top +incdir+../rd_agt_top +incdir+../test +incdir+../tb +incdir+../src  +define+WRAPPING_INCR
+SVTB =  ../tb/top.sv
+SVTB1 = ../test/test_pkg.sv
+COVOP= -dbg -coverage sba
+work = work
+VSIMOPT= +access +r -sva 
+VSIMBATCH = -acdb_file mem_cov.acdb
+VSIMBATCH1 = -c -acdb_file mem_cov1.acdb -assert -do "log -rec *;run -all;exit"
+VSIMBATCH2 = -c -acdb_file mem_cov2.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH3 = -c -acdb_file mem_cov3.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH4 = -c -acdb_file mem_cov4.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH5 = -c -acdb_file mem_cov5.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH6 = -c -acdb_file mem_cov6.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH7 = -c -acdb_file mem_cov7.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH8 = -c -acdb_file mem_cov8.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH9 = -c -acdb_file mem_cov9.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH10 = -c -acdb_file mem_cov10.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH11 = -c -acdb_file mem_cov11.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH12 = -c -acdb_file mem_cov12.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH13 = -c -acdb_file mem_cov13.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH14 = -c -acdb_file mem_cov14.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH15 = -c -acdb_file mem_cov15.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH16 = -c -acdb_file mem_cov16.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH17 = -c -acdb_file mem_cov17.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH18= -c -acdb_file mem_cov18.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH19 = -c -acdb_file mem_cov19.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH20 = -c -acdb_file mem_cov20.acdb -do "log -rec *;;run -all;exit"
+
+
+VSIMBATCH21 = -c -acdb_file mem_cov21.acdb -do "log -rec *;run -all;exit"
+VSIMBATCH22 = -c -acdb_file mem_cov22.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH23 = -c -acdb_file mem_cov23.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH24 = -c -acdb_file mem_cov24.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH25 = -c -acdb_file mem_cov25.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH26 = -c -acdb_file mem_cov26.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH27 = -c -acdb_file mem_cov27.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH28 = -c -acdb_file mem_cov28.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH29 = -c -acdb_file mem_cov29.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH30 = -c -acdb_file mem_cov30.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH31 = -c -acdb_file mem_cov31.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH32 = -c -acdb_file mem_cov32.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH33 = -c -acdb_file mem_cov33.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH34 = -c -acdb_file mem_cov34.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH35 = -c -acdb_file mem_cov35.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH36 = -c -acdb_file mem_cov36.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH37 = -c -acdb_file mem_cov37.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH38= -c -acdb_file mem_cov38.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH39 = -c -acdb_file mem_cov39.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH40 = -c -acdb_file mem_cov40.acdb -do "log -rec *;;run -all;exit"
+VSIMBATCH41 = -c -acdb_file mem_cov41.acdb -do "log -rec *;;run -all;exit"
+
+
+lib:
+	vlib $(work)
+	vmap work $(work)
+
+sv_cmp:clean  lib comp0
+
+         
+run_sim:sv_cmp
+	vsim $(VSIMOPT) $(VSIMCOV) $(VSIMBATCH1) work.top   +UVM_TESTNAME=bridge_seq1_test 
+	vsim -c -do "acdb report -db mem_cov1.acdb -html -o mem_cov1.html" 
+
+gui:
+	vsim&
+	
+comp0:
+	vlog -uvm -work $(work) $(COVOP) $(RTL) $(INC) $(SVTB1) $(SVTB)
+
+
+run_test: sv_cmp
+	vsim  $(VSIMBATCH1) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test1_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq1_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov1.acdb -html -o mem_cov1.html;exit"   
+
+run_test1:sv_cmp
+	vsim  $(VSIMBATCH2) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test2_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq2_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov2.acdb -html -o mem_cov2.html;exit" 
+
+run_test2:sv_cmp
+	vsim  $(VSIMBATCH3) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test3_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq3_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov3.acdb -html -o mem_cov3.html;exit" 
+
+run_test3:sv_cmp
+	vsim  $(VSIMBATCH4) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test4_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq4_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov4.acdb -html -o mem_cov4.html;exit" 
+run_test4:sv_cmp
+	vsim  $(VSIMBATCH5) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test5_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq5_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov5.acdb -html -o mem_cov5.html;exit" 
+run_test5:sv_cmp
+	vsim  $(VSIMBATCH6) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test6_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq6_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov6.acdb -html -o mem_cov6.html;exit" 
+run_test6:sv_cmp
+	vsim  $(VSIMBATCH7) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test7_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq7_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov7.acdb -html -o mem_cov7.html;exit" 
+run_test7:sv_cmp
+	vsim  $(VSIMBATCH8) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test8_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq8_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov8.acdb -html -o mem_cov8.html;exit" 
+
+run_test8:sv_cmp
+	vsim  $(VSIMBATCH9) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test9_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq9_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov9.acdb -html -o mem_cov9.html;exit" 
+run_test9:sv_cmp
+	vsim  $(VSIMBATCH10) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test10_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq10_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov10.acdb -html -o mem_cov10.html;exit" 
+run_test10:sv_cmp
+	vsim  $(VSIMBATCH11) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test11_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq11_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov11.acdb -html -o mem_cov11.html;exit" 
+run_test11:sv_cmp
+	vsim  $(VSIMBATCH12) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test12_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq12_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov12.acdb -html -o mem_cov12.html;exit" 
+
+run_test12:sv_cmp
+	vsim  $(VSIMBATCH13) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test13_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq13_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov13.acdb -html -o mem_cov13.html;exit" 
+run_test13:sv_cmp
+	vsim  $(VSIMBATCH14) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test14_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq14_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov14.acdb -html -o mem_cov14.html;exit" 
+run_test14:sv_cmp
+	vsim  $(VSIMBATCH15) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test15_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq15_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov15.acdb -html -o mem_cov15.html;exit" 
+
+run_test15:sv_cmp
+	vsim  $(VSIMBATCH16) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test16_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq16_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov16.acdb -html -o mem_cov16.html;exit" 
+run_test16:sv_cmp
+	vsim  $(VSIMBATCH17) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test17_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq17_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov17.acdb -html -o mem_cov17.html;exit" 
+run_test17:sv_cmp
+	vsim  $(VSIMBATCH18) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test18_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq18_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov18.acdb -html -o mem_cov18.html;exit" 
+run_test18:sv_cmp
+	vsim  $(VSIMBATCH19) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test19_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq19_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov19.acdb -html -o mem_cov19.html;exit" 
+run_test19:sv_cmp
+	vsim  $(VSIMBATCH20) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test20_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq20_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov20.acdb -html -o mem_cov20.html;exit" 
+
+run_test20: sv_cmp
+	vsim  $(VSIMBATCH21) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test21_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq21_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov21.acdb -html -o mem_cov21.html;exit"   
+
+run_test21:sv_cmp
+	vsim  $(VSIMBATCH22) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test22_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq22_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov22.acdb -html -o mem_cov22.html;exit" 
+
+run_test22:sv_cmp
+	vsim  $(VSIMBATCH23) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test23_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq23_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov23.acdb -html -o mem_cov23.html;exit" 
+
+run_test23:sv_cmp
+	vsim  $(VSIMBATCH24) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test24_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq24_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov24.acdb -html -o mem_cov24.html;exit" 
+run_test24:sv_cmp
+	vsim  $(VSIMBATCH25) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test25_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq25_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov25.acdb -html -o mem_cov25.html;exit" 
+run_test25:sv_cmp
+	vsim  $(VSIMBATCH26) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test26_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq26_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov26.acdb -html -o mem_cov26.html;exit" 
+run_test26:sv_cmp
+	vsim  $(VSIMBATCH27) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test27_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq27_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov27.acdb -html -o mem_cov27.html;exit" 
+run_test27:sv_cmp
+	vsim  $(VSIMBATCH28) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test28_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq28_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov28.acdb -html -o mem_cov28.html;exit" 
+
+run_test28:sv_cmp
+	vsim  $(VSIMBATCH29) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test29_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq29_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov29.acdb -html -o mem_cov29.html;exit" 
+run_test29:sv_cmp
+	vsim  $(VSIMBATCH30) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test30_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq30_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov30.acdb -html -o mem_cov30.html;exit" 
+run_test30:sv_cmp
+	vsim  $(VSIMBATCH31) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test31_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq31_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov31.acdb -html -o mem_cov31.html;exit" 
+run_test31:sv_cmp
+	vsim  $(VSIMBATCH32) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test32_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq32_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov32.acdb -html -o mem_cov32.html;exit" 
+
+run_test32:sv_cmp
+	vsim  $(VSIMBATCH33) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test33_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq33_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov33.acdb -html -o mem_cov33.html;exit" 
+run_test33:sv_cmp
+	vsim  $(VSIMBATCH34) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test34_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq34_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov34.acdb -html -o mem_cov34.html;exit" 
+run_test34:sv_cmp
+	vsim  $(VSIMBATCH35) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test35_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq35_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov35.acdb -html -o mem_cov35.html;exit" 
+
+run_test35:sv_cmp
+	vsim  $(VSIMBATCH36) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test36_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq36_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov36.acdb -html -o mem_cov36.html;exit" 
+run_test36:sv_cmp
+	vsim  $(VSIMBATCH37) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test37_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq37_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov37.acdb -html -o mem_cov37.html;exit" 
+
+
+run_test37:sv_cmp
+	vsim  $(VSIMBATCH38) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test38_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq38_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov38.acdb -html -o mem_cov38.html;exit" 
+run_test38:sv_cmp
+	vsim  $(VSIMBATCH39) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test39_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq39_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov39.acdb -html -o mem_cov39.html;exit" 
+run_test39:sv_cmp
+	vsim  $(VSIMBATCH40) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test40_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq40_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov40.acdb -html -o mem_cov40.html;exit" 
+run_test40:sv_cmp
+	vsim  $(VSIMBATCH41) $(VSIMOPT) $(VSIMCOV)  -sva -sv_seed random -l test41_sim.log work.top +UVM_OBJECTION_TRACE +UVM_TESTNAME=bridge_seq41_test +UVM_VERBOSITY=UVM_MEDIUM #The Default Verbosity is medium
+	vsim -c -do "acdb report -db mem_cov41.acdb -html -o mem_cov41.html;exit" 
+
+
+clean:
+	rm -rf modelsim.* transcript* *log* work vsim.wlf fcover* covhtml* mem_cov*
+	clear
+report:
+	vsim -c -do "acdb merge -cov sbfa -i mem_cov1.acdb -i mem_cov2.acdb -i mem_cov3.acdb -i mem_cov4.acdb -i mem_cov5.acdb -i mem_cov6.acdb -i mem_cov7.acdb -i mem_cov8.acdb -i mem_cov9.acdb -i mem_cov10.acdb -i mem_cov11.acdb -i mem_cov12.acdb -i mem_cov13.acdb -i mem_cov14.acdb -i mem_cov15.acdb -i mem_cov16.acdb -i mem_cov17.acdb -i mem_cov18.acdb -i mem_cov19.acdb -i mem_cov20.acdb -i mem_cov21.acdb -i mem_cov22.acdb -i mem_cov23.acdb -i mem_cov24.acdb -i mem_cov25.acdb -i mem_cov26.acdb -i mem_cov27.acdb -i mem_cov28.acdb -i mem_cov29.acdb -i mem_cov30.acdb -i mem_cov31.acdb -i mem_cov32.acdb -i mem_cov33.acdb -i mem_cov34.acdb -i mem_cov35.acdb -i mem_cov36.acdb -i mem_cov37.acdb -i mem_cov38.acdb -i mem_cov39.acdb -i mem_cov40.acdb -i mem_cov41.acdb -o mem_cov_merged.acdb;exit"
+
+rep:
+	vsim -c -do "acdb report -db mem_cov_merged.acdb -html -o mem_cov_merged.html;exit" 
+
+regress: clean run_test run_test1 run_test2 run_test3 run_test4 run_test5 run_test6 run_test7 run_test8 run_test9 run_test10 run_test11 run_test12 run_test13 run_test14 run_test15 run_test16 run_test17 run_test18 run_test19 run_test20 run_test21 run_test22 run_test23 run_test24 run_test25 run_test26 run_test27 run_test28 run_test29 run_test30 run_test31 run_test32 run_test33 run_test34 run_test35 run_test36 run_test37 run_test38 run_test39 run_test40 report rep cov
+
+cov:
+	firefox mem_cov_merged.html
+
